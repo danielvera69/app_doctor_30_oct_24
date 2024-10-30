@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ 
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Médico - Pacientes</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: #2c3e50;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            transition: all 0.3s;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin: 5px 10px;
+        }
+        .sidebar .nav-link:hover {
+            background: #34495e;
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+        }
+        .main-content {
+            background: #f8f9fa;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transition: all 0.3s;
+        }
+        .action-buttons .btn {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        .action-buttons .btn:hover {
+            transform: translateY(-2px);
+        }
+        .patient-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-active {
+            background-color: #2ecc71;
+        }
+        .status-waiting {
+            background-color: #f1c40f;
+        }
+        .status-inactive {
+            background-color: #e74c3c;
+        }
+        .search-box {
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        .search-box:focus {
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            border-color: #3498db;
+        }
+        .btn-attend {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .btn-attend:hover {
+            background-color: #27ae60;
+            color: white;
+        }
+        .pagination .page-link {
+            color: #2c3e50;
+            border: none;
+            margin: 0 2px;
+            border-radius: 5px;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 px-0 sidebar">
+            <div class="text-center py-4">
+                <img src="/api/placeholder/150/50" alt="Logo" class="mb-3">
+                <h5 class="text-white">Sistema Médico</h5>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="#"><i class="fas fa-home me-2"></i> Dashboard</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt me-2"></i> Citas</a>
+                <a class="nav-link active" href="#"><i class="fas fa-user-injured me-2"></i> Pacientes</a>
+                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atenciones</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Mantenimiento</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 px-md-4 main-content">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light sticky-top mb-4">
+                <div class="container-fluid">
+                    <button class="btn btn-link">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle text-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-md me-2"></i>Dr. Juan Pérez
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Salir</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            {% if messages %}
+             <div id="notification-container" class="fixed top-0 right-0 m-3 z-50">
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div id="alert-border-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                                    <path d="M2 8.99997H5V21H2C1.44772 21 1 20.5523 1 20V9.99997C1 9.44769 1.44772 8.99997 2 8.99997ZM7.29289 7.70708L13.6934 1.30661C13.8693 1.13066 14.1479 1.11087 14.3469 1.26016L15.1995 1.8996C15.6842 2.26312 15.9026 2.88253 15.7531 3.46966L14.5998 7.99997H21C22.1046 7.99997 23 8.8954 23 9.99997V12.1043C23 12.3656 22.9488 12.6243 22.8494 12.8658L19.755 20.3807C19.6007 20.7554 19.2355 21 18.8303 21H8C7.44772 21 7 20.5523 7 20V8.41419C7 8.14897 7.10536 7.89462 7.29289 7.70708Z"></path>
+                                </svg>
+                                <div class="ms-3">
+                                    <span class="fw-bold">¡Buenas noticias!</span> {{ message }}<br>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div id="alert-border-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <div class="d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM11 14h2v2h-2v-2zm0-8h2v6h-2V6z"></path>
+                                </svg>
+                                <div class="ms-3">
+                                    <span class="fw-bold">Malas noticias</span> {{ message }}<br>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                 
+                    {% endif %}
+                {% endfor %}
+            </div>
+           {% endif %}
+
+            <!-- Patient List Content -->
+            <div class="card mb-4">
+                <div class="card-body">
+                   <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0">Listado de Pacientes</h5>
+                   </div>
+
+                   <!-- Search and Filter -->
+                   <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between g-3 mb-4">
+                    <form method="GET" action="{% url 'core:patient_list' %}" class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+                        <div class="col-md-6">
+                            <input type="text" name="q" class="form-control search-box"   value="{{ request.GET.q }}" placeholder="Buscar paciente...">
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="sex">
+                                <option value="T">Todos</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                      </form>
+                      <a class="btn btn-primary mt-3 mt-md-0" href="{% url 'core:patient_create' %}">
+                                <i class="fas fa-plus me-2"></i>Nuevo Paciente
+                      </a>
+                    </div>
+
+                    <!-- Patient Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Sexo</th>
+                                    <th>Alergias</th>
+                                    <th>Enfermedades</th>
+                                    <th>Medicacion</th>
+                                    <th>Cirugias</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               {% for item in pacientes %} 
+                                
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src={{item.get_image}} class="rounded-circle me-3" width="30px">
+                                            <div>
+                                                <div class="fw-bold">{{item.nombre_completo}}</div>
+                                                <small class="text-muted">{{item.id}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{item.get_sexo_display}}</td>
+                                    <td>{{item.alergias}}</td>
+                                    <td>{{item.enfermedades_cronicas}}</td>
+                                    <td>{{item.medicacion_actual}}</td>
+                                    <td>{{item.cirugias_previas}}</td>
+                                   
+                                    <td>
+                                        <span class="patient-status status-active"></span>
+                                        Activo
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons d-flex gap-2">
+                                           <button class="btn btn-info btn-sm" title="Detalle Paciente"
+                                                onclick="verPaciente('{{  item.id }}')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="{% url 'core:patient_update' item.id %}" class="btn btn-info btn-sm text-white" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% with id=item.id name=item.nombre_completo msg="Esta seguro de elimnar al paciente:" %}
+                                             <button class="btn btn-danger" onclick="confirmDelete('{{ id }}','{{name}}','{{ msg|escapejs }}');"> <i class="fa-solid fa-trash"></i></button>
+                                            {% endwith %}
+                                        </div>
+                                    </td>
+                                </tr>
+                             {% endfor %} 
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="d-flex justify-content-between align-items-center mt-4">
+                        <p class="text-muted mb-0">{{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} pacientes</p>
+                        <ul class="pagination mb-0">
+                            {% if page_obj.has_previous %} 
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1"><i class="fas fa-chevron-left"></i></a>
+                                </li>
+                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                              <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{num}}</a></li>
+                           
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="fas fa-chevron-right"></i></a>
+                              </li>
+                             {% endif %}
+                        </ul>
+                    </nav>
+                    <!-- Fin de Pagination -->
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- llama al modal generico de eliminacion -->
+  {% include 'includes/confirm_delete_modal.html' %}
+  <!-- llama al modal de mostrar datos del detalle del paciente -->
+  {% include 'includes/patient_detail_modal.html' %}
+  <script>
+    /* funciones del modal eliminar*/
+    function confirmDelete(id,name,msg) {
+        // Actualiza el mensaje del modal
+        document.getElementById('modalMessage').innerText = `${msg} ${name}`;
+
+        // Actualiza la acción del formulario
+        const form = document.getElementById('deleteForm');
+        form.action = `/patient_delete/${id}/`; // Ajusta la URL según tu configuración
+
+        // Muestra el modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+    function closeModal() {
+        const modalElement = document.getElementById('confirmDeleteModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+    /* funciones del mode¿al detalle */
+    function verPaciente(id) {
+    // Obtener los datos del paciente
+      fetch(`/patient_detail/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Llenar el modal con los datos
+            document.getElementById('paciente-id').textContent = data.id;
+            document.getElementById('paciente-nombres').textContent = data.nombres;
+            document.getElementById('paciente-apellidos').textContent = data.apellidos;
+            document.getElementById('paciente-foto').src = data.foto;
+            document.getElementById('paciente-nac').textContent = data.fecha_nac;
+            document.getElementById('paciente-edad').textContent = `${data.edad} años`;
+            document.getElementById('paciente-dni').textContent = data.dni;
+            document.getElementById('paciente-telefono').textContent = data.telefono;
+            document.getElementById('paciente-direccion').textContent = data.direccion;
+            
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('pacienteModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar los datos del paciente');
+        });
+    }
+  </script>
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

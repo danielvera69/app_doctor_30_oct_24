@@ -1,0 +1,22 @@
+ <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger bg-opacity-50 justify-content-center text-center">
+                    <h5 class="modal-title text-white text-uppercase fw-bold" id="confirmDeleteLabel">Confirmación de Eliminación</h5>
+                    <button type="button" class="close position-absolute end-0 me-3" onclick="closeModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger fw-bold" id="modalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>

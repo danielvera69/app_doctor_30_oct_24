@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+     {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+       /* Centramos la imagen dentro de su columna */
+       .sidebar {
+            min-height: 100vh;
+            background: #2c3e50;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            transition: all 0.3s;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin: 5px 10px;
+        }
+        .sidebar .nav-link:hover {
+            background: #34495e;
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+        }
+        .main-content {
+            background: #f8f9fa;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transition: all 0.3s;
+        }
+        .action-buttons .btn {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        .action-buttons .btn:hover {
+            transform: translateY(-2px);
+        }
+        .patient-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-active {
+            background-color: #2ecc71;
+        }
+        .status-waiting {
+            background-color: #f1c40f;
+        }
+        .status-inactive {
+            background-color: #e74c3c;
+        }
+        .search-box {
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        .search-box:focus {
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            border-color: #3498db;
+        }
+        .btn-attend {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .btn-attend:hover {
+            background-color: #27ae60;
+            color: white;
+        }
+        .pagination .page-link {
+            color: #2c3e50;
+            border: none;
+            margin: 0 2px;
+            border-radius: 5px;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 px-0 sidebar">
+            <div class="text-center py-4">
+                <img src="/api/placeholder/150/50" alt="Logo" class="mb-3">
+                <h5 class="text-white">Sistema Médico</h5>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link" href="#"><i class="fas fa-home me-2"></i> Dashboard</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt me-2"></i> Citas</a>
+                <a class="nav-link active" href="#"><i class="fas fa-user-injured me-2"></i> Pacientes</a>
+                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atenciones</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Mantenimiento</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 px-md-4 main-content">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light sticky-top mb-4">
+                <div class="container-fluid">
+                    <button class="btn btn-link">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle text-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-md me-2"></i>Dr. Juan Pérez
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Salir</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+    <!-- Paciente form -->
+    <!-- mensajes -->
+     {% if messages %}
+       <div id="notification-container" class="fixed top-0 right-0 m-3 z-50">
+        {% for message in messages %}
+             {% if message.tags == 'error' %}
+                <div id="alert-border-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM11 14h2v2h-2v-2zm0-8h2v6h-2V6z"></path>
+                        </svg>
+                        <div class="ms-3">
+                            <span>{{ message }}</span> <br>
+                        </div>
+                        <div class="ms-3">
+                        <ul> 
+                         {% if form.errors %}
+                            {% for field, errors in form.errors.items %}
+                                
+                                    {% for error in errors %}
+                                        <li>{{ field }}: {{ error }}</li>
+                                    {% endfor %}
+                                
+                            {% endfor %}
+                          {% endif %}
+                          </ul>
+                         </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- fin de mensajes -->
+    <form method="post" enctype="multipart/form-data" class="py-4">
+      {% csrf_token %}  
+      <div class="card shadow p-4">
+        <h2 class="text-center text-primary mb-4">{{ title1 }}</h2>
+        <div class="row g-0">
+            <!-- Columna de la izquierda -->
+            <div class="col-lg-4">
+                <div id="imagenPreview" class="text-center mb-4">
+                    {% if form.foto.value %}
+                    <img id="imagenSeleccionada" src="{{ form.foto.value.url }}" class="rounded img-fluid" alt="Foto del cliente">
+                    {% else %}
+                    <img id="imagenSeleccionada" src="{% static 'img/empty.png' %}" class="rounded img-fluid" alt="Foto por defecto">
+                    {% endif %}
+                </div>
+                <div class="text-center">
+                    <label for="{{ form.foto.id_for_label }}" class="form-label fw-bold">{{ form.foto.label }}</label>
+                    {{ form.foto }}
+                </div>
+            </div>
+
+            <!-- Columna de la derecha -->
+            <div class="col-lg-8 px-2">
+             
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.cedula.id_for_label }}" class="form-label fw-bold">{{ form.cedula.label }}</label>
+                        {{ form.cedula }}
+                        {{ form.cedula.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.nombres.id_for_label }}" class="form-label fw-bold">{{ form.nombres.label }}</label>
+                        {{ form.nombres }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.apellidos.id_for_label }}" class="form-label fw-bold">{{ form.apellidos.label }}</label>
+                        {{ form.apellidos }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.direccion.id_for_label }}" class="form-label fw-bold">{{ form.direccion.label }}</label>
+                        {{ form.direccion }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.sexo.id_for_label }}" class="form-label fw-bold">{{ form.sexo.label }}</label>
+                        {{ form.sexo }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.estado_civil.id_for_label }}" class="form-label fw-bold">{{ form.estado_civil.label }}</label>
+                        {{ form.estado_civil }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.fecha_nacimiento.id_for_label }}" class="form-label fw-bold">{{ form.fecha_nacimiento.label }}</label>
+                        {{ form.fecha_nacimiento }}
+                        {{ form.fecha_nacimiento.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.telefono.id_for_label }}" class="form-label fw-bold">{{ form.telefono.label }}</label>
+                        {{ form.telefono }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.latitud.id_for_label }}" class="form-label fw-bold">{{ form.latitud.label }}</label>
+                        {{ form.latitud }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.longitud.id_for_label }}" class="form-label fw-bold">{{ form.longitud.label }}</label>
+                        {{ form.longitud }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.tipo_sangre.id_for_label }}" class="form-label fw-bold">{{ form.tipo_sangre.label }}</label>
+                        {{ form.tipo_sangre }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.alergias.id_for_label }}" class="form-label fw-bold">{{ form.alergias.label }}</label>
+                        {{ form.alergias }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.enfermedades_cronicas.id_for_label }}" class="form-label fw-bold">{{ form.enfermedades_cronicas.label }}</label>
+                        {{ form.enfermedades_cronicas }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.medicacion_actual.id_for_label }}" class="form-label fw-bold">{{ form.medicacion_actual.label }}</label>
+                        {{ form.medicacion_actual }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.cirugias_previas.id_for_label }}" class="form-label fw-bold">{{ form.cirugias_previas.label }}</label>
+                        {{ form.cirugias_previas }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.antecedentes_personales.id_for_label }}" class="form-label fw-bold">{{ form.antecedentes_personales.label }}</label>
+                        {{ form.antecedentes_personales }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.antecedentes_familiares.id_for_label }}" class="form-label fw-bold">{{ form.antecedentes_familiares.label }}</label>
+                        {{ form.antecedentes_familiares }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.activo.id_for_label }}" class="form-label fw-bold">{{ form.activo.label }}</label>
+                        {{ form.activo }}
+                    </div>
+                </div>
+                 <div class="d-flex justify-content-end mt-4">
+                    <button class="btn btn-outline-success me-2" type="submit">Grabar Doctor</button>
+                    <a class="btn btn-outline-warning" href="{% url 'core:patient_list'%}">Cancelar</a>
+                </div>
+            </div>
+        </div>
+       </div>
+      </form>
+     </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
