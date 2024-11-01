@@ -27,7 +27,7 @@ class PatientListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Medical"
+        context['title'] = "SaludSync"
         context['title1'] = "Consulta de Pacientes"
         return context
     
@@ -40,7 +40,8 @@ class PatientCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['title1'] = 'Crear Paciente?'
+        context['title'] = "SaludSync"
+        context['title1'] = 'Ingresar informacion del Paciente'
         context['grabar'] = 'Grabar Paciente'
         context['back_url'] = self.success_url
         return context
@@ -67,7 +68,9 @@ class PatientUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['grabar'] = 'Actualizar Proveedor'
+        context['title'] = "SaludSync"
+        context['title1'] = 'Modificar informacion del Paciente'
+        context['grabar'] = 'Actualizar Paciente'
         context['back_url'] = self.success_url
         return context
     
@@ -92,7 +95,8 @@ class PatientDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['grabar'] = 'Eliminar Proveedorl'
+        context['title'] = "SaludSync"
+        context['grabar'] = 'Eliminar Al Paciente'
         context['description'] = f"¿Desea Eliminar al paciente: {self.object.name}?"
         context['back_url'] = self.success_url
         return context

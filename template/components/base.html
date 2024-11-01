@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" >
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+  </head>
+  <body>
+   <div class="container-fluid">
+     <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 px-0 sidebar">
+               
+            <div class="text-center py-1">
+                <div class="d-flex flex-row justify-content-center align-items-center text-center">
+                    <img src="{% static 'img/usuario_anonimo.png' %}" alt="Logo" class="mb-3 rounded-circle" width="100px">
+                  
+                </div>
+                <h5 class="text-white">{{request.user}}</h5>
+            </div>
+            <nav class="nav flex-column mt-4">
+                <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> Dashboard</a>
+                <a class="nav-link" href="#"><i class="fas fa-calendar-alt me-2"></i> Citas</a>
+                <a class="nav-link" href="#"><i class="fas fa-user-injured me-2"></i> Pacientes</a>
+                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i> Consultas</a>
+                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atencion</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Mantenimiento</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 px-md-4 main-content">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light sticky-top mb-4">
+                <div class="container-fluid">
+                <a class="text-white text-decoration-none fw-bold d-inline-flex align-items-center gap-2 transition-all hover:text-primary-dark" href="{% url 'core:home' %}">
+                        <i class="fas fa-home"></i> <!-- o cualquier otro icono de Font Awesome -->
+                        {{title}}
+                    </a>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-md me-2"></i>Dr. Juan Pérez
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Salir</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+           <main>
+             <!-- llama al message de exito o fracaso -->
+             {% include 'includes/messages.html' %}
+            {% block content %}
+           
+            <!-- Dashboard Content -->
+             <div class="row g-4 mb-4">
+                <!-- Stats Cards -->
+                <div class="col-md-3">
+                    <div class="card stat-card">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="icon-square bg-white text-primary">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <h6 class="card-title mb-0">Citas Hoy</h6>
+                                <h3 class="mb-0">24</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="icon-square bg-white text-success">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <div>
+                            
+                                <h6 class="card-title mb-0">Pacientes</h6> 
+                                <h3 class="mb-0">{{can_paci}}</h3>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="background: linear-gradient(45deg, #e74c3c, #c0392b);">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="icon-square bg-white text-danger">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div>
+                                <h6 class="card-title mb-0">Atenciones</h6>
+                                <h3 class="mb-0">80</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="icon-square bg-white text-purple">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                            <div>
+                                <h6 class="card-title mb-0">Consultas</h6>
+                                <h3 class="mb-0">156</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+            <!-- Quick Actions -->
+             <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Acciones Rápidas</h5>
+                            <div class="quick-actions d-flex flex-wrap gap-3">
+                                <button class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Nueva Cita</button>
+                                <a class="btn btn-primary text-white d-inline-flex align-items-center" href="{% url 'core:patient_list' %}">
+                                  <i class="fas fa-user-plus me-2"></i>
+                                  Nuevo Paciente 
+                                </a>
+                                <button class="btn btn-info text-white"><i class="fas fa-file-medical me-2"></i>Nueva Consulta</button>
+                                <button class="btn btn-warning"><i class="fas fa-notes-medical me-2"></i>Historial Médico</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+            <!-- Recent Activity & Upcoming Appointments -->
+             <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Actividad Reciente</h5>
+                            <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                <div class="bg-primary text-white p-2 rounded me-3">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Nuevo paciente registrado</p>
+                                    <small class="text-muted">Hace 5 minutos</small>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                <div class="bg-success text-white p-2 rounded me-3">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Cita completada</p>
+                                    <small class="text-muted">Hace 15 minutos</small>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex align-items-center py-3">
+                                <div class="bg-info text-white p-2 rounded me-3">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Nueva consulta registrada</p>
+                                    <small class="text-muted">Hace 30 minutos</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Próximas Citas</h5>
+                            <div class="appointment-item d-flex align-items-center py-3 border-bottom">
+                                <img src="/api/placeholder/48/48" alt="Patient" class="rounded-circle me-3">
+                                <div>
+                                    <p class="mb-0 fw-bold">María García</p>
+                                    <small class="text-muted">Hoy - 10:00 AM</small>
+                                </div>
+                            </div>
+                            <div class="appointment-item d-flex align-items-center py-3 border-bottom">
+                                <img src="/api/placeholder/48/48" alt="Patient" class="rounded-circle me-3">
+                                <div>
+                                    <p class="mb-0 fw-bold">Carlos Rodríguez</p>
+                                    <small class="text-muted">Hoy - 11:30 AM</small>
+                                </div>
+                            </div>
+                            <div class="appointment-item d-flex align-items-center py-3">
+                                <img src="/api/placeholder/48/48" alt="Patient" class="rounded-circle me-3">
+                                <div>
+                                    <p class="mb-0 fw-bold">Ana Martínez</p>
+                                    <small class="text-muted">Hoy - 2:00 PM</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+            {% endblock %} 
+         </main>  
+        </div>
+     </div>
+   </div>
+   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+   {% block js %}{% endblock %}
+  </body>
+</html>

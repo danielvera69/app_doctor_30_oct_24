@@ -1,0 +1,84 @@
+/* Centramos la imagen dentro de su columna */
+/* .sidebar {
+    min-height: 100vh;
+    background: #2c3e50;
+    transition: all 0.3s;
+} */
+.sidebar .nav-link {
+    color: #ecf0f1;
+    transition: all 0.3s;
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin: 5px 10px;
+}
+.sidebar .nav-link:hover {
+    background: #34495e;
+    transform: translateX(5px);
+}
+.sidebar .nav-link.active {
+    background: #3498db;
+}
+.main-content {
+    background: #f8f9fa;
+}
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    transition: all 0.3s;
+}
+.action-buttons .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 0.3s;
+}
+.action-buttons .btn:hover {
+    transform: translateY(-2px);
+}
+.patient-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+.status-active {
+    background-color: #2ecc71;
+}
+.status-waiting {
+    background-color: #f1c40f;
+}
+.status-inactive {
+    background-color: #e74c3c;
+}
+.search-box {
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+.search-box:focus {
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    border-color: #3498db;
+}
+.btn-attend {
+    background-color: #2ecc71;
+    color: white;
+}
+.btn-attend:hover {
+    background-color: #27ae60;
+    color: white;
+}
+.pagination .page-link {
+    color: #2c3e50;
+    border: none;
+    margin: 0 2px;
+    border-radius: 5px;
+}
+.pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+}
