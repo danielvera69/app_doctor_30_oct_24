@@ -4,7 +4,6 @@ from aplication.attention.models import (
     CitaMedica,
     Atencion,
     DetalleAtencion,
-    ExamenSolicitado,
     ServiciosAdicionales,
     CostosAtencion,
 )
@@ -40,12 +39,6 @@ class DetalleAtencionAdmin(admin.ModelAdmin):
     list_display = ('atencion', 'medicamento', 'cantidad', 'prescripcion')
     search_fields = ('atencion__paciente__nombre', 'medicamento__nombre')
 
-# Admin para ExamenSolicitado
-@admin.register(ExamenSolicitado)
-class ExamenSolicitadoAdmin(admin.ModelAdmin):
-    list_display = ('nombre_examen', 'paciente', 'fecha_solicitud', 'estado')
-    search_fields = ('nombre_examen', 'paciente__nombre')
-
 # Admin para ServiciosAdicionales
 @admin.register(ServiciosAdicionales)
 class ServiciosAdicionalesAdmin(admin.ModelAdmin):
@@ -55,7 +48,7 @@ class ServiciosAdicionalesAdmin(admin.ModelAdmin):
 # Admin para CostosAtencion
 @admin.register(CostosAtencion)
 class CostosAtencionAdmin(admin.ModelAdmin):
-    list_display = ('atencion', 'total', 'fecha_registro')
+    list_display = ('atencion', 'total', 'fecha_pago')
     search_fields = ('atencion__paciente__nombre',)
 
 

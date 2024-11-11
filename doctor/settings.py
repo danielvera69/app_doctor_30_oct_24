@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'aplication.security.apps.SecurityConfig',
     # apps de terceros
     'django_extensions',
+    'widget_tweaks',
+   
+
 ]
 SHELL_PLUS = "ipython"  # Si tienes IPython instalado, usa esta opción
 SHELL_PLUS_PRINT_SQL = True
@@ -134,6 +137,7 @@ STATIC_URL = 'static/' # url de archivos estaticos
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)#carpeta fisica de archivos estaticos
 MEDIA_ROOT = os.path.join(BASE_DIR,'media') # carpeta fisica de archivos de Imagenes
 MEDIA_URL = '/media/' # 
+LOGIN_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,6 +1,9 @@
 .sidebar {
   min-height: 100vh;
-  background: hsl(180, 83%, 14%) ;
+  background:  hsl(240, 52%, 48%) ;
+  background: linear-gradient(45deg, #2ecc71, #27ae60);
+  border-radius: 15px;
+  box-shadow: 2 8px 12px rgba(0, 0, 0, 0.5);
   transition: all 0.3s;
 }
 .sidebar .nav-link {
@@ -8,14 +11,14 @@
   transition: all 0.3s;
   padding: 15px 20px;
   border-radius: 5px;
-  margin: 5px 10px;
+  margin: 5px 5px;
 }
 .sidebar .nav-link:hover {
   background: #34495e;
   transform: translateX(5px);
 }
 .sidebar .nav-link.active {
-  background: #3498db;
+  background:#34495e;
 }
 .main-content {
   background: #f8f9fa;
@@ -34,7 +37,9 @@
   color: white;
 }
 .navbar {
-  background: #6ca1ef;
+  background: hsl(240, 52%, 48%) ;
+  background: linear-gradient(45deg, #2ecc71, #27ae60);
+  border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .icon-square {

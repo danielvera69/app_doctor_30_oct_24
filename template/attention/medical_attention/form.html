@@ -1,0 +1,428 @@
+{% extends "components/base.html" %}
+{% load static %}
+{% block css%}
+   
+    <style>
+    .form-floating > label {
+        padding: 0.5rem 0.75rem;
+    }
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+        height: 3.5rem;
+        line-height: 1.25;
+    }
+    .form-floating > textarea.form-control {
+        height: auto;
+        min-height: 100px;
+    }
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    .section-title {
+        color: #2563eb;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    .btn-primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        padding: 0.625rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<title>{% block title %}Registrar Atención Médica{% endblock title %}</title>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xxl-10">
+            <h3 class="text-center mb-2 fw-bold text-primary-emphasis shadow">
+                {{ title1 }} Médica
+            </h3>
+            
+            <div class="card shadow">
+                <div class="card-body p-2 p-md-3">
+                    <form id="frmAtencion" method="POST">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        
+                        <!-- Información del Paciente -->
+                        <h5 class="text-primary-emphasis fw-bold">Información del Paciente</h5>
+                         <hr class="border border-2 border-success">
+                        <div class="row g-4 mb-2">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.paciente }}
+                                    <label for="{{ form.paciente.id_for_label }}">{{ form.paciente.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    {{ form.peso }}
+                                    <label for="{{ form.peso.id_for_label }}">{{ form.peso.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    {{ form.altura }}
+                                    <label for="{{ form.altura.id_for_label }}">{{ form.altura.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signos Vitales -->
+                        <h5 class="text-primary-emphasis fw-bold">Signos Vitales</h5>
+                        <hr class="border border-2 border-success">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    {{ form.presion_arterial }}
+                                    <label for="{{ form.presion_arterial.id_for_label }}">{{ form.presion_arterial.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    {{ form.pulso }}
+                                    <label for="{{ form.pulso.id_for_label }}">{{ form.pulso.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    {{ form.temperatura }}
+                                    <label for="{{ form.temperatura.id_for_label }}">{{ form.temperatura.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    {{ form.saturacion_oxigeno }}
+                                    <label for="{{ form.saturacion_oxigeno.id_for_label }}">{{ form.saturacion_oxigeno.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    {{ form.frecuencia_respiratoria }}
+                                    <label for="{{ form.frecuencia_respiratoria.id_for_label }}">{{ form.frecuencia_respiratoria.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluación Médica -->
+                        <h5 class="text-primary-emphasis fw-bold">Evaluación Médica</h5>
+                         <hr class="border border-2 border-success">
+
+                        <div class="row g-4 mb-2">
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    {{ form.motivo_consulta }}
+                                    <label for="{{ form.motivo_consulta.id_for_label }}">{{ form.motivo_consulta.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.sintomas }}
+                                    <label for="{{ form.sintomas.id_for_label }}">{{ form.sintomas.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.examen_fisico }}
+                                    <label for="{{ form.examen_fisico.id_for_label }}">{{ form.examen_fisico.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Diagnóstico y Tratamiento -->
+                        <h5 class="text-primary-emphasis fw-bold">Diagnóstico y Tratamiento</h5>
+                         <hr class="border border-2 border-success">
+                        <div class="row g-4 mb-2">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.diagnostico }}
+                                    <label for="{{ form.diagnostico.id_for_label }}">{{ form.diagnostico.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.tratamiento }}
+                                    <label for="{{ form.tratamiento.id_for_label }}">{{ form.tratamiento.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.examenes_enviados }}
+                                    <label for="{{ form.examenes_enviados.id_for_label }}">{{ form.examenes_enviados.label }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    {{ form.comentario_adicional }}
+                                    <label for="{{ form.comentario_adicional.id_for_label }}">{{ form.comentario_adicional.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                     
+                    </form>
+                     <!-- Información de medicmentos y prescripcion -->
+                     <h5 class="text-primary-emphasis fw-bold">Medicamentos y Prescripcion</h5>
+                     <hr class="border border-3 border-danger fw-bold">
+                     <div class="row g-3 mb-2">
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                   <select class="form-select" id="medicationSelect">
+                                      {% for item in medications %}
+                                        <option data-id="{{item.id}}" data-des="{{item.nombre}}"  value="{{item.id}}" {% if forloop.first %}selected{% endif %}>{{item.nombre}}</option>
+                                      {% endfor %}
+                                    </select>
+                                     <label for="medicationSelect" class="form-label">Medicamento</label>
+                                </div>
+                            </div>
+                             <div class="col-md-2">
+                                <div class="form-floating">
+                                      <input type="number" class="form-control" value="1" id="medicationQuantity" min="1">
+                                      <label for="medicationQuantity" class="form-label">Cantidad</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                      <input type="text" class="form-control" id="medicationPrescription">
+                                       
+                                       <label for="medicationPrescription">
+                                         Prescripción
+                                        </label>
+                                </div>
+                            </div>
+                      
+                            <div class="col-md-2">
+                                <div class="form-floating mt-2 ms-2">
+                                    <button class="btn btn-outline-success fw-bold w-100" onclick="addMedication()">
+                                    Agregar 
+                                     </button>
+                                </div>
+                             </div>
+                     </div>
+                     <hr class="border border-3 border-danger">
+                     <div class="table-responsive">
+                       <table class="table table-hover " id="medicationsTable">
+                          <thead >
+                            <tr >
+                                <th class="text-warning">Código</th>
+                                <th class="text-success">Medicamento</th>
+                                <th class="text-primary">Cantidad</th>
+                                <th class="text-danger-emphasis fw-bold">Prescripción</th>
+                                <th class="text-danger">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                         </table>
+                      </div>
+                      <div class="d-flex justify-content-end mt-4 gap-2">
+                           <button type="button" onclick="atencionMedica.saveAtencion()" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Guardar
+                            </button>
+                             <a class="btn btn-success" href="{% url 'attention:attention_list'%}">Cancelar</a>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+ <script>
+ class AtencionMedica {
+    constructor(detalleUpdate) {
+        // Inicializar atributos de la atención médica
+        this.paciente = '';
+        this.peso = '';
+        this.altura = '';
+        this.presionArterial = '';
+        this.pulso = '';
+        this.temperatura = '';
+        this.saturacionOxigeno = '';
+        this.frecuenciaRespiratoria = '';
+        this.motivoConsulta = '';
+        this.sintomas = '';
+        this.examenFisico = '';
+        this.tratamiento = '';
+        this.examenesEnviados = '';
+        this.comentarioAdicional = '';
+        this.diagnostico = [];
+        this.medicamentos = []
+        console.log("detalle")
+        //console.log(detalleUpdate)
+
+        if (detalleUpdate && detalleUpdate.length > 0){
+           detalleUpdate.forEach(det => {
+            let codigo=det.medicamento_id
+            let nombre=det.medicamento__nombre
+            let cantidad= det.cantidad
+            let prescripcion=det.prescripcion
+            print( codigo, nombre, cantidad, prescripcion)
+            this.medicamentos.push({ codigo, nombre, cantidad, prescripcion });
+            });
+            this.syncTable();
+        }
+        console.log(this.medicamentos)
+    }
+
+    // Método para añadir un medicamento al arreglo
+    addMedication(codigo, nombre, cantidad, prescripcion) {
+        // Verificar si el medicamento ya existe en el arreglo
+        const existingMedication = this.medicamentos.findIndex(med => med.codigo == codigo);
+        cantidad = (cantidad.trim() == "") ? 0 : parseInt(cantidad) 
+        if (existingMedication >= 0) {
+            alert('Este medicamento ya está en la lista. Actualizando cantidad y prescripción.');
+            this.medicamentos[existingMedication].cantidad += cantidad;
+            this.medicamentos[existingMedication].prescripcion = prescripcion;
+            
+        } else {
+            // Si no existe, lo añadimos
+            this.medicamentos.push({ codigo, nombre, cantidad, prescripcion });
+        }
+        this.syncTable();
+    }
+
+    // Método para eliminar un medicamento del arreglo
+    removeMedication(codigo) {
+        this.medicamentos = this.medicamentos.filter(med => med.codigo != codigo);
+        this.syncTable();
+    }
+
+    // Método para sincronizar la tabla en HTML con los datos del arreglo
+    syncTable() {
+        const tableBody = document.querySelector('#medicationsTable tbody');
+        tableBody.innerHTML = '';
+
+        this.medicamentos.forEach((med, index) => {
+            const row = `
+                <tr>
+                    <td>${med.codigo}</td>
+                    <td>${med.nombre}</td>
+                    <td>${med.cantidad}</td>
+                    <td>${med.prescripcion}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="atencionMedica.removeMedication('${med.codigo}')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    // Método para capturar todos los datos del formulario y enviarlos al backend
+    saveAtencion() {
+       
+        this.paciente = document.querySelector('#id_paciente').value;
+        this.peso = document.querySelector('#id_peso').value;
+        this.altura = document.querySelector('#id_altura').value;
+        this.presionArterial = document.querySelector('#id_presion_arterial').value;
+        this.pulso = document.querySelector('#id_pulso').value;
+        this.temperatura = document.querySelector('#id_temperatura').value;
+        this.saturacionOxigeno = document.querySelector('#id_saturacion_oxigeno').value;
+        this.frecuenciaRespiratoria = document.querySelector('#id_frecuencia_respiratoria').value;
+        this.motivoConsulta = document.querySelector('#id_motivo_consulta').value;
+        this.sintomas = document.querySelector('#id_sintomas').value;
+        this.examenFisico = document.querySelector('#id_examen_fisico').value;
+        this.tratamiento = document.querySelector('#id_tratamiento').value;
+        this.examenesEnviados = document.querySelector('#id_examenes_enviados').value;
+        this.comentarioAdicional = document.querySelector('#id_comentario_adicional').value;
+        // Recorre las opciones seleccionadas y las agrega al arreglo
+        this.diagnostico=[]
+        for (let option of document.getElementById("id_diagnostico").selectedOptions) {
+            this.diagnostico.push(option.value);
+        }
+         // Validar que todos los campos obligatorios tengan valor
+        if (!this.paciente || !this.peso || !this.altura || !this.presionArterial || !this.pulso || 
+            !this.temperatura || !this.saturacionOxigeno || !this.frecuenciaRespiratoria || 
+            !this.motivoConsulta || !this.sintomas || !this.examenFisico || !this.diagnostico || 
+            !this.tratamiento || !this.examenesEnviados) {
+            alert('Por favor, complete todos los campos obligatorios.');
+            return;  // Detener la ejecución si algún campo está vacío
+        }
+
+        // Verificar si existen medicamentos y que el arreglo no esté vacío
+        if (this.medicamentos && this.medicamentos.length === 0) {
+            alert('Por favor, agregue al menos un medicamento.');
+            return;  // Detener la ejecución si el arreglo de medicamentos está vacío
+        }
+        // Crear el objeto para enviar al backend
+        const data = {
+            paciente: this.paciente,
+            peso: this.peso,
+            altura: this.altura,
+            presionArterial: this.presionArterial,
+            pulso: this.pulso,
+            temperatura: this.temperatura,
+            saturacionOxigeno: this.saturacionOxigeno,
+            frecuenciaRespiratoria: this.frecuenciaRespiratoria,
+            motivoConsulta: this.motivoConsulta,
+            sintomas: this.sintomas,
+            examenFisico: this.examenFisico,
+            diagnostico: this.diagnostico,
+            tratamiento: this.tratamiento,
+            examenesEnviados: this.examenesEnviados,
+            comentarioAdicional: this.comentarioAdicional,
+            medicamentos: this.medicamentos
+        };
+        console.log(data)
+        //alert("Datos enviados...")
+        // Enviar los datos al backend usando fetch()
+        //let url = (detailAtencionUpdate && detailAtencionUpdate.length > 0) ? '/attention_update/' : '/attention_create/'
+        let url = window.location.pathname.trim()
+        //url = url.slice(0, -1);
+        alert(url)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data)
+            alert(data.msg);
+             window.location.href = '/attention_list/'
+        })
+        .catch(error => {
+            console.error('Error al guardar la atención médica:', error);
+        });
+    } 
+}
+
+// Inicializar la clase
+let detailAtencionUpdate = JSON.parse('{{ detail_atencion|safe }}');
+const atencionMedica = new AtencionMedica(detailAtencionUpdate);
+
+
+// Función para añadir un medicamento al hacer clic en el botón
+function addMedication() {
+    const codigo = document.querySelector('#medicationSelect').value;
+    const nombre = document.querySelector('#medicationSelect option:checked').text;
+    const cantidad = document.querySelector('#medicationQuantity').value;
+    const prescripcion = document.querySelector('#medicationPrescription').value;
+
+    atencionMedica.addMedication(codigo, nombre, cantidad, prescripcion);
+}
+     
+ </script>
+{% endblock %}

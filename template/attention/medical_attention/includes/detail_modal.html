@@ -1,0 +1,57 @@
+<!-- templates/includes/patient_detail_modal.html -->
+<div class="modal fade" id="datosModal" tabindex="-1" aria-labelledby="datosModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary bg-opacity-75">
+                <h5 class="modal-title text-white fw-bold" id="pacienteModalLabel">
+                    <i class="fas fa-user-circle me-2"></i>Detalles de la Atencion del Paciente
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           <div class="modal-body">
+             <div class="row">
+                <!-- Columna para la foto -->
+                <div class="col-md-4 text-center mb-3">
+                    <img id="paciente-foto" src="" alt="Foto del paciente" 
+                        class="img-fluid rounded shadow-sm" 
+                        style="max-height: 200px; width: auto;">
+                </div>
+                <!-- Columna para los datos -->
+                <div class="col-md-8">
+                        <p><strong><i class="fas fa-id-card me-2"></i>Atencion#:</strong> <span id="atencion-id"></span></p>
+                            <p><strong><i class="fas fa-user me-2"></i>Paciente:</strong> <span id="paciente-nombres"></span></p>
+                            
+                </div>
+             </div>
+              <div class="row">
+                <div class="col-md-12">
+                     <hr class="border border-3 border-danger">
+                     <div class="table-responsive">
+                       <table class="table table-hover " id="medicationsTable">
+                          <thead >
+                            <tr >
+                                <th class="text-warning">Código</th>
+                                <th class="text-success">Medicamento</th>
+                                <th class="text-primary">Cantidad</th>
+                                <th class="text-danger-emphasis fw-bold">Prescripción</th>
+                              
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                         </table>
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="fas fa-times me-2"></i>Cerrar
+    </button>
+</div>
+</div>
+</div>
+</div>

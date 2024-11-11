@@ -1,0 +1,163 @@
+{% extends "components/base.html" %}
+{% block content %} 
+  <div class="container-fluid">
+    <div class="row">
+       <!-- Main Content -->
+        <div class="col-md-12 col-lg-12 px-md-4 main-content">
+           
+           
+            <!-- Patient List Content -->
+            <div class="card mb-4">
+                <div class="card-body">
+                   <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="card-title mb-0 text-primary-emphasis fw-bold">{{title1}}</h3>
+                   </div>
+
+                   <!-- Search and Filter -->
+                   <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between g-3 mb-4">
+                    <form method="GET" action="{% url 'attention:attention_list' %}" class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+                        <div class="col-md-6">
+                            <input type="text" name="q" class="form-control search-box"   value="{{ request.GET.q }}" placeholder="Buscar paciente...">
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="sex">
+                                <option value="T">Todos</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                      </form>
+                      <a class="btn btn-primary fw-bold mt-3 mt-md-0" href="{% url 'attention:attention_create' %}">
+                                <i class="fas fa-plus me-2"></i>Nuevo Atencion
+                      </a>
+                    </div>
+
+                    <!-- Patient Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Fecha_atencion</th>
+                                    <th>Motivo_consulta</th>
+                                    <th>Tratamiento</th>
+                                    <th>Diagnostico</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               {% for item in atenciones %} 
+                                
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src={{item.paciente.get_image}} class="rounded-circle me-3" width="30px">
+                                            <div>
+                                                <div class="fw-bold">{{item.paciente.nombre_completo}}</div>
+                                                <small class="text-muted">Rec#{{item.id}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{item.fecha_atencion}}</td>
+                                    <td>{{item.motivo_consulta}}</td>
+                                    <td>{{item.tratamiento}}</td>
+                                    <td>{{item.get_diagnosticos}}</td>
+                                    <td>
+                                        <div class="action-buttons d-flex gap-2">
+                                           <button class="btn btn-primary btn-sm" title="Detalle Atencion"
+                                                onclick="verDatos('{{  item.id }}')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="{% url 'attention:attention_update' item.id %}" class="btn btn-success btn-sm text-white" title="Editar Atencion">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% with id=item.id name=item.nombre_completo msg="Esta seguro de eliminar al paciente:" %}
+                                             <button class="btn btn-danger" title="Eliminar Atencion" onclick="confirmDelete('{{ id }}','{{name}}','{{ msg|escapejs }}');"> <i class="fa-solid fa-trash"></i></button>
+                                            {% endwith %}
+                                        </div>
+                                    </td>
+                                </tr>
+                             {% endfor %} 
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="d-flex justify-content-between align-items-center mt-4">
+                        <p class="text-muted mb-0">{{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} pacientes</p>
+                        <ul class="pagination mb-0">
+                            {% if page_obj.has_previous %} 
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1"><i class="fas fa-chevron-left"></i></a>
+                                </li>
+                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                              <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{num}}</a></li>
+                           
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="fas fa-chevron-right"></i></a>
+                              </li>
+                             {% endif %}
+                        </ul>
+                    </nav>
+                    <!-- Fin de Pagination -->
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+ 
+  <!-- añade el modal particular de los datos de detalle del paciente -->
+  {% include 'attention/medical_attention/includes/detail_modal.html' %}
+ 
+{% endblock %}
+{% block js %}
+  <script>
+    /* funciones del mode¿al detalle */
+    
+    function syncTable(medicamentos) {
+        const tableBody = document.querySelector('#medicationsTable tbody');
+        tableBody.innerHTML = '';
+
+        medicamentos.forEach((med, index) => {
+            const row = `
+                <tr>
+                    <td>${med.medicamento_id}</td>
+                    <td>${med.medicamento__nombre}</td>
+                    <td>${med.cantidad}</td>
+                    <td>${med.prescripcion}</td>
+                   
+                </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    function verDatos(id) {
+    //   
+    // Obtener los datos de la atencion del paciente
+      fetch(`/attention_detail/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Llenar el modal con los datos
+            document.getElementById('atencion-id').textContent = data.id;
+            document.getElementById('paciente-nombres').textContent = data.nombres;
+            document.getElementById('paciente-foto').src = data.foto;
+            let detailAtencion = JSON.parse(data.detalle_atencion);
+            console.log(data.detalle_atencion)
+            console.log(detailAtencion)
+            syncTable(detailAtencion)
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('datosModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar los datos de la atencion del paciente');
+        });
+    }
+  </script>
+{% endblock %}
+
+

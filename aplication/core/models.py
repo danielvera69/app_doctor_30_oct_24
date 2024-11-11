@@ -27,7 +27,7 @@ class ActivePatientManager(models.Manager):
     # Método para obtener un queryset de pacientes activos
     def get_queryset(self):
         # Retorna un queryset que solo incluye los pacientes que están activos.   
-        return super().get_queryset().filter(active=True)
+        return super().get_queryset().filter(activo=True)
                
 """ Modelo que representa a los pacientes de la clínica. 
 Almacena información personal, de contacto, ubicación y detalles médicos.
@@ -277,6 +277,13 @@ class MarcaMedicamento(models.Model):
         # Nombre singular y plural del modelo en la interfaz administrativa
         verbose_name = "Tipo de Medicamento"
         verbose_name_plural = "Tipos de Medicamentos"
+        
+class ActiveMedicationManager(models.Manager):
+    # Método para obtener un queryset de pacientes activos
+    def get_queryset(self):
+        # Retorna un queryset que solo incluye los pacientes que están activos.   
+        return super().get_queryset().filter(activo=True)
+                       
 # Modelo que representa los medicamentos que están disponibles en la clínica.
 # Incluye información sobre el nombre, tipo, y detalles adicionales del medicamento.
 class Medicamento(models.Model):
@@ -300,9 +307,12 @@ class Medicamento(models.Model):
     
     activo = models.BooleanField(default=True,verbose_name="Activo")
     
+    objects = models.Manager()  # Manager predeterminado
+    active_medication = ActiveMedicationManager()  # Manager Personalizado
+    
     def __str__(self):
         return f"{self.nombre} - ({self.tipo})"
-
+    
     class Meta:
         # Ordena los medicamentos alfabéticamente por nombre
         ordering = ['nombre']
@@ -329,53 +339,6 @@ class Diagnostico(models.Model):
         # Nombre singular y plural del modelo en la interfaz administrativa
         verbose_name = "Diagnóstico"
         verbose_name_plural = "Diagnósticos"
-
-# Modelo que representa una categoría de exámenes.
-# Agrupa varios tipos de exámenes bajo una misma categoría (ej. Sangre, Orina, Colesterol).
-class CategoriaExamen(models.Model):
-    # Nombre de la categoría (ej. Sangre, Orina, Colesterol)
-    nombre = models.CharField(max_length=100, verbose_name="Nombre de la Categoría")
-    # Descripción opcional de la categoría
-    descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción de la Categoría")
-
-    activo = models.BooleanField(default=True,verbose_name="Activo")
-    
-    def __str__(self):
-        return self.nombre
-
-    class Meta:
-        # Ordena las categorías por nombre
-        ordering = ['nombre']
-        # Nombre singular y plural del modelo en la interfaz administrativa
-        verbose_name = "Categoría de Examen"
-        verbose_name_plural = "Categorías de Exámenes"
-
-# Modelo que representa un tipo de examen médico.
-# Cada examen está asociado a una categoría (ej. Sangre, Orina, Colesterol)
-# y tiene valores mínimos y máximos de referencia.
-class TipoCategoria(models.Model):
-    # Relación con la categoría del examen (ej. Sangre, Orina, etc.)
-    categoria_examen = models.ForeignKey('CategoriaExamen', on_delete=models.CASCADE, verbose_name="Categoría del Examen",related_name="categorias_examen")
-    # Nombre del tipo de examen (ej. Colesterol, Hemoglobina, Glucosa)
-    nombre = models.CharField(max_length=255, verbose_name="Nombre del Examen")
-    # Descripción opcional del examen, con información adicional si aplica
-    descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción del Examen")
-    # Valor mínimo de referencia para este tipo de examen (ej. 70 mg/dL para glucosa)
-    valor_minimo = models.CharField(max_length=100,null=True, blank=True, verbose_name="Valor Mínimo")
-    # Valor máximo de referencia para este tipo de examen (ej. 100 mg/dL para glucosa)
-    valor_maximo = models.CharField(max_length=100, null=True, blank=True, verbose_name="Valor Máximo")
-    
-    activo = models.BooleanField(default=True,verbose_name="Activo")
-    
-    def __str__(self):
-        return f"{self.categoria_examen} - {self.nombre}"
-
-    class Meta:
-        # Ordena los tipos de examen por categoría y nombre
-        ordering = ['categoria_examen', 'nombre']
-        # Nombre singular y plural del modelo en la interfaz administrativa
-        verbose_name = "Tipo de Examen"
-        verbose_name_plural = "Tipos de Exámenes"
 
 # modelo que alamacena todos los aciones de ingreso, actualizacion, eliminacion d elos usarios que manipulan las opciones de la aplicacion
 class AuditUser(models.Model):

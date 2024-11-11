@@ -26,10 +26,28 @@
             <nav class="nav flex-column mt-4">
                 <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i> Dashboard</a>
                 <a class="nav-link" href="#"><i class="fas fa-calendar-alt me-2"></i> Citas</a>
-                <a class="nav-link" href="#"><i class="fas fa-user-injured me-2"></i> Pacientes</a>
-                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i> Consultas</a>
-                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atencion</a>
-                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Mantenimiento</a>
+                <a class="nav-link" href="{% url 'core:patient_list' %}"><i class="fas fa-user-injured me-2"></i> Pacientes</a>
+                
+                <a class="nav-link" href="{% url 'attention:attention_list' %}"><i class="fas fa-procedures me-2"></i> Atencion</a>
+                <a class="nav-link" href="{% url 'attention:attention_list' %}"><i class="fas fa-procedures me-2"></i>Ficha Clinica</a>
+                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i>Pagos</a>
+                <a class="nav-link" href="#"><i class="fas fa-stethoscope me-2"></i>Examenes</a>
+                <a class="text-white ms-2 text-decoration-none " href="#"><i></i> Mantenimiento</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Especialidad</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Doctor</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Horarios</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Servicios</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Costos</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Cargo</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Certificados</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Empleado</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Tipo Medicina</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i>Marca Medicina </a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Medicamento</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Diagnostico</a>
+                <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Tipo Sangre</a>
+               
+                            
             </nav>
         </div>
 
@@ -45,7 +63,7 @@
                     <div class="d-flex align-items-center">
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-md me-2"></i>Dr. Juan Pérez
+                                <i class="fas fa-user-md me-2"></i>Dr Daniel Vera
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
@@ -112,8 +130,8 @@
                                 <i class="fas fa-file-medical"></i>
                             </div>
                             <div>
-                                <h6 class="card-title mb-0">Consultas</h6>
-                                <h3 class="mb-0">156</h3>
+                                <h6 class="card-title mb-0">Pagos hoy</h6>
+                                <h3 class="mb-0">$10000</h3>
                             </div>
                         </div>
                     </div>
@@ -126,13 +144,19 @@
                         <div class="card-body">
                             <h5 class="card-title mb-4">Acciones Rápidas</h5>
                             <div class="quick-actions d-flex flex-wrap gap-3">
-                                <button class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Nueva Cita</button>
-                                <a class="btn btn-primary text-white d-inline-flex align-items-center" href="{% url 'core:patient_list' %}">
+                                <button class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Cita</button>
+                                <a class="btn btn-success text-white d-inline-flex align-items-center" href="{% url 'core:patient_list' %}">
                                   <i class="fas fa-user-plus me-2"></i>
-                                  Nuevo Paciente 
+                                  Paciente 
                                 </a>
-                                <button class="btn btn-info text-white"><i class="fas fa-file-medical me-2"></i>Nueva Consulta</button>
-                                <button class="btn btn-warning"><i class="fas fa-notes-medical me-2"></i>Historial Médico</button>
+                                <a class="btn btn-dark text-white" href="{% url 'attention:attention_list' %}" ><i class="fas fa-file-medical me-2"></i>Atencion</a>
+                               
+                                <a class="btn btn-info fw-bold text-white" href="#" ><i class="fas fa-file-medical me-2"></i>Certificado</a>
+                               
+                                <a class="btn btn-danger"><i class="fas fa-notes-medical me-2"></i>Ficha Clinica</a>
+                                 <a class="btn btn-secondary text-white" href="#" ><i class="fas fa-file-medical me-2"></i>Pagos</a>
+                                 <a class="btn btn-warning text-white" href="#" ><i class="fas fa-file-medical me-2"></i>Examenes</a>
+
                             </div>
                         </div>
                     </div>

@@ -1,21 +1,23 @@
 from django.urls import reverse_lazy
 from aplication.core.forms.patient import PatientForm
 from aplication.core.models import Paciente
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Q
+from doctor.mixins import CreateViewMixin, DeleteViewMixin, ListViewMixin, UpdateViewMixin
 from doctor.utils import save_audit
 
-class PatientListView(ListView):
+class PatientListView(LoginRequiredMixin,ListViewMixin,ListView):
     template_name = "core/patient/list.html"
     model = Paciente
     context_object_name = 'pacientes'
-    query = None
-    paginate_by = 2
+    # query = None
+    # paginate_by = 2
     
     def get_queryset(self):
-        self.query = Q()
+        # self.query = Q()
         q1 = self.request.GET.get('q') # ver
         sex= self.request.GET.get('sex')
         if q1 is not None: 
@@ -25,13 +27,13 @@ class PatientListView(ListView):
         if sex == "M" or sex=="F": self.query.add(Q(sexo__icontains=sex), Q.AND)   
         return self.model.objects.filter(self.query).order_by('apellidos')
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "SaludSync"
-        context['title1'] = "Consulta de Pacientes"
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+        # context['title'] = "SaludSync"
+        # context['title1'] = "Consulta de Pacientes"
+        # return context
     
-class PatientCreateView(CreateView):
+class PatientCreateView(LoginRequiredMixin,CreateViewMixin, CreateView):
     model = Paciente
     template_name = 'core/patient/form.html'
     form_class = PatientForm
@@ -40,8 +42,8 @@ class PatientCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['title'] = "SaludSync"
-        context['title1'] = 'Ingresar informacion del Paciente'
+        # context['title'] = "SaludSync"
+        # context['title1'] = 'Ingresar informacion del Paciente'
         context['grabar'] = 'Grabar Paciente'
         context['back_url'] = self.success_url
         return context
@@ -59,7 +61,7 @@ class PatientCreateView(CreateView):
         print(form.errors)
         return self.render_to_response(self.get_context_data(form=form))
     
-class PatientUpdateView(UpdateView):
+class PatientUpdateView(LoginRequiredMixin,UpdateViewMixin,UpdateView):
     model = Paciente
     template_name = 'core/patient/form.html'
     form_class = PatientForm
@@ -68,8 +70,8 @@ class PatientUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['title'] = "SaludSync"
-        context['title1'] = 'Modificar informacion del Paciente'
+        # context['title'] = "SaludSync"
+        # context['title1'] = 'Modificar informacion del Paciente'
         context['grabar'] = 'Actualizar Paciente'
         context['back_url'] = self.success_url
         return context
@@ -87,7 +89,7 @@ class PatientUpdateView(UpdateView):
         print(form.errors)
         return self.render_to_response(self.get_context_data(form=form))
     
-class PatientDeleteView(DeleteView):
+class PatientDeleteView(LoginRequiredMixin,DeleteViewMixin,DeleteView):
     model = Paciente
     # template_name = 'core/patient/form.html'
     success_url = reverse_lazy('core:patient_list')
@@ -95,9 +97,9 @@ class PatientDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['title'] = "SaludSync"
+        # context['title'] = "SaludSync"
         context['grabar'] = 'Eliminar Al Paciente'
-        context['description'] = f"¿Desea Eliminar al paciente: {self.object.name}?"
+        context['description'] = f"¿Desea Eliminar al pacientedddddd: {self.object.name}?"
         context['back_url'] = self.success_url
         return context
     
@@ -110,7 +112,7 @@ class PatientDeleteView(DeleteView):
         # self.object.save()
         return super().delete(request, *args, **kwargs)
     
-class PatientDetailView(DetailView):
+class PatientDetailView(LoginRequiredMixin,DetailView):
     model = Paciente
     
     def get(self, request, *args, **kwargs):
